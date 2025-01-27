@@ -1,8 +1,8 @@
 import PyPDF2
 import tkinter as tk
-from tkinter import filedialog
 import openai
 import os
+from tkinter import filedialog
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
@@ -19,12 +19,19 @@ def upload_file():
     file_path = filedialog.askopenfilename(filetypes=[("PDF files", "*.pdf")])
     if file_path:
         resume_text = extract_text_from_pdf(file_path)
-        print("Extracted Text from Resume:")
+        print("Extracted Resume Text:")
         print(resume_text)
+        response = openai.Completion.create(
+            engine="text-davinci-003",
+            prompt=f"Generate interview questions based on the following resume:\n\n{resume_text}",
+            max_tokens=150
+        )
+        interview_questions = response.choices[0].text.strip()
+        print("Generated Interview Questions:")
+        print(interview_questions)
+    else:
+        print("No resume text extracted.")
 
 if __name__ == "__main__":
-    openai.api_key = os.getenv("OPENAI_API_KEY")
-    
     root = tk.Tk()
-    root.withdraw()  # Hide the root window
     upload_file()
