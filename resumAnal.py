@@ -1,12 +1,12 @@
 import PyPDF2
 import tkinter as tk
-import openai
 import os
 from tkinter import filedialog
 from dotenv import load_dotenv
+import requests
 
 load_dotenv()  # Load environment variables from .env file
-openai.api_key = os.getenv("OPENAI_API_KEY")
+deepseek_api_key = os.getenv("DEEPSEEK_API_KEY")
 
 def extract_text_from_pdf(pdf_path):
     with open(pdf_path, 'rb') as file:
@@ -23,14 +23,20 @@ def upload_file():
         resume_text = extract_text_from_pdf(file_path)
         print("Extracted Resume Text:")
         print(resume_text)
-        response = openai.Completion.create(
-            model="gpt-4o-mini",
-            prompt=f"Generate interview questions based on the following resume text:\n\n{resume_text}",
-            max_tokens=150
+        
+        response = requests.post(
+            "https://api.deepseek.com/v1/generate-questions",
+            headers={"Authorization": f"Bearer {deepseek_api_key}"},
+            json={"text": resume_text}
         )
-        interview_questions = response.choices[0].text.strip()
-        print("Generated Interview Questions:")
-        print(interview_questions)
+        
+        if response.status_code == 200:
+            interview_questions = response.json().get("questions", [])
+            print("Generated Interview Questions:")
+            for question in interview_questions:
+                print(question)
+        else:
+            print("Failed to generate interview questions. Status code:", response.status_code)
     else:
         print("No file selected.")
 
