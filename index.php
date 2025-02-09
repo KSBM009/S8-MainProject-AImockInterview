@@ -1,3 +1,37 @@
+<?php
+    
+    if(isset($_POST['submit'])){
+        
+        $allowed_ext = array('pdf', 'doc', 'docx');
+
+        if(!empty($_FILES['upload'])){
+            $file_name = $_FILES['upload']['name'];
+            $file_size = $_FILES['upload']['size'];
+            $file_tmp_name = $_FILES['upload']['tmp_name'];
+            $target_dir = "uploads/$file_name";
+
+            // Get File extension
+            $file_ext = explode('.', $file_name);
+            $file_ext = strtolower(end($file_ext));
+
+            // Validate file extension
+            if(in_array($file_ext, $allowed_ext)){
+                if($file_size <= 1000000){
+                    move_uploaded_file($file_tmp_name, $target_dir);
+                    $msg = '<p style="color : green;">File uploaded successfully</p>';
+                } else {
+                    $msg = '<p style="color : red;">File size too large</p>';
+                }
+            } else {
+                $msg = '<p style="color : red;">Invalid file type</p>';
+            }
+        } else {
+            $msg = '<p style="color : red;">Please choose a file</p>';
+        }
+    }
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,53 +40,10 @@
     <title>Interview Assistant</title>
 </head>
 <body>
-    
+    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data">
+        Select Your Resume to upload:
+        <input type="file" name="fileToUpload" id="fileToUpload">
+        <input type="submit" value="Upload" name="submit">
+    </form>
 </body>
 </html>
-
-<?php
-
-?>
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['fileToUpload'])) {
-    $target_dir = "uploads/";
-    $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
-    $uploadOk = 1;
-    $fileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-
-    // Check if file already exists
-    if (file_exists($target_file)) {
-        echo "Sorry, file already exists.";
-        $uploadOk = 0;
-    }
-
-    // Check file size
-    if ($_FILES["fileToUpload"]["size"] > 500000) {
-        echo "Sorry, your file is too large.";
-        $uploadOk = 0;
-    }
-
-    // Allow certain file formats
-    if ($fileType != "jpg" && $fileType != "png" && $fileType != "jpeg" && $fileType != "gif") {
-        echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-        $uploadOk = 0;
-    }
-
-    // Check if $uploadOk is set to 0 by an error
-    if ($uploadOk == 0) {
-        echo "Sorry, your file was not uploaded.";
-    // if everything is ok, try to upload file
-    } else {
-        if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-            echo "The file ". htmlspecialchars(basename($_FILES["fileToUpload"]["name"])). " has been uploaded.";
-        } else {
-            echo "Sorry, there was an error uploading your file.";
-        }
-    }
-}
-?>
-
-<form action="" method="post" enctype="multipart/form-data">
-    Select file to upload:
-    <input type="file" name="fileToUpload" id="fileToUpload">
-    <input type="submit" value="Upload File" name="submit">
-</form>
