@@ -16,7 +16,7 @@
 
             // Validate file extension
             if(in_array($file_ext, $allowed_ext)){
-                if($file_size <= 1000000){
+                if($file_size <= 1000000000){
                     move_uploaded_file($file_tmp_name, $target_dir);
                     $msg = '<p style="color : green;">File uploaded successfully</p>';
                 } else {
@@ -41,7 +41,7 @@
 </head>
 <body>
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data">
-        Select Your Resume to upload:
+        Upload Your Resume to upload:
         <input type="file" name="fileToUpload" id="fileToUpload">
         <input type="submit" value="Upload" name="submit">
     </form>
