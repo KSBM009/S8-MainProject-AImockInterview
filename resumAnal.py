@@ -37,6 +37,7 @@ def upload_file():
                 print(question)
         else:
             print("Failed to generate interview questions. Status code:", response.status_code)
+            print("Error message:", response.text)
     else:
         print("No file selected.")
 
