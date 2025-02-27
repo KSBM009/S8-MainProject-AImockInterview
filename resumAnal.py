@@ -14,7 +14,7 @@ client = OpenAI(api_key=os.getenv("DEEPSEEK_API_KEY"), baseurl="https://openrout
 chat = client.chat.completions.create(
     model="deepseek/deepseek-r1:free",
     messages = [
-        {"role": "system", "content": "You are an Interviewer."},
+        {"role": "system", "content": "You are an Interviewer. Provide some questions to ask a candidate."},
     ]
 )
 
