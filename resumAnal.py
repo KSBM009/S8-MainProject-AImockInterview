@@ -1,4 +1,5 @@
 import PyPDF2
+import OpenAI from "openai"
 import tkinter as tk
 import os
 from tkinter import filedialog
