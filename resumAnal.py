@@ -1,10 +1,4 @@
 from openai import OpenAI
-import PyPDF2
-import tkinter as tk
-import os
-from tkinter import filedialog
-from dotenv import load_dotenv
-import requests
 
 load_dotenv()  # Load environment variables from .env file
 deepseek_api_key = os.getenv("DEEPSEEK_API_KEY")
