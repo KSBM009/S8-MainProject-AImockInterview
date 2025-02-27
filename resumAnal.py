@@ -1,4 +1,6 @@
 from openai import OpenAI
+import os
+from dotenv import load_dotenv
 
 load_dotenv()  # Load environment variables from .env file
 deepseek_api_key = os.getenv("DEEPSEEK_API_KEY")
