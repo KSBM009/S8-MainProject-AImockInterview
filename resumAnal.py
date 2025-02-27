@@ -1,5 +1,5 @@
+from openai import OpenAI
 import PyPDF2
-import OpenAI from "openai"
 import tkinter as tk
 import os
 from tkinter import filedialog
@@ -8,6 +8,8 @@ import requests
 
 load_dotenv()  # Load environment variables from .env file
 deepseek_api_key = os.getenv("DEEPSEEK_API_KEY")
+
+client = OpenAI(api_key=os.getenv("DEEPSEEK_API_KEY"), baseurl="https://openrouter.ai/api/v1/")
 
 def extract_text_from_pdf(pdf_path):
     with open(pdf_path, 'rb') as file:
